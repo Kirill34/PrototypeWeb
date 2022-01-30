@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="refresh" content="0; url=table.html" />
     <meta charset="UTF-8">
     <title>Написание протитипа функции</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -58,8 +59,14 @@
         </li>
     </ul>
 
-    <div id="problem-elements" class="serviceblock" style="padding: 25px; font-size: xx-large;">
-       <div class="row">
+    <div id="problem-elements" class="serviceblock card" style="padding: 25px; margin: 25px;">
+        <h5 class="card-header">
+            Выделите элементы данных из текста задания
+        </h5>
+        <div class="card-body">
+
+            <h6 class="card-subtitle mb-2 text-muted">Необходимо по очереди выделить элементы данных в тесте задания и после каждого выделения нажать "Проверить"</h6>
+       <div class="alert alert-primary row" role="alert" style="margin: 20px;">
         <div class="lexem col" >
             <p>
                 Напишите
@@ -141,67 +148,79 @@
             </p>
         </div>
        </div>
-        <button onclick="range = getSelectionRange(); $.post('api.php', 'leftBorder='+range.start+'&rightBorder='+range.end+'&student=1&session=1&interaction=1', function (data) {obj = JSON.parse(data); if (obj.mission) { $('#errormsgs').html(document.getElementById('errormsgs').innerHTML + '<br>Найден элемент 💎: '+obj.mission); if (obj.interaction == '1') { document.getElementById('toDataDirectionsBtn').hidden = false; } } if (obj.correct=='false') showMessage(obj.message);   })">Проверить</button>
+        <button style="margin: 20px;" class="btn btn-primary" onclick="range = getSelectionRange(); $.post('api.php', 'leftBorder='+range.start+'&rightBorder='+range.end+'&student=1&session=1&interaction=1', function (data) {obj = JSON.parse(data); if (obj.mission) { $('#errormsgs').html(document.getElementById('errormsgs').innerHTML + '<br>Найден элемент 💎: '+obj.mission); if (obj.interaction == '1') { document.getElementById('toDataDirectionsBtn').hidden = false; } } if (obj.correct=='false') showMessage(obj.message);   })">
+            Отметить элемент данных
+        </button>
 
-        <div id="current_message" style="background: #eccccf; color: #6a1a21; font-size: xx-large; margin-bottom: 30px; margin-top: 20px; padding-left: 20px;">
+        <div id="current_message" class="alert alert-danger" role="alert" style="margin-bottom: 30px; margin: 20px; padding-left: 20px;">
 
         </div>
 
-        <div id="errormsgs" style="font-size: xx-large; background: #d1e7dd; color: #0c4128; padding-left: 20px;">
+        <div class="alert alert-success" role="alert" id="errormsgs" style="margin: 20px; padding-left: 20px;">
         </div>
-        <button id="toDataDirectionsBtn" hidden="true" onclick="(document.getElementsByTagName('li')[1]).getElementsByTagName('a')[0].click();">
+        <button class="btn btn-primary" id="toDataDirectionsBtn" hidden="true" onclick="(document.getElementsByTagName('li')[1]).getElementsByTagName('a')[0].click();">
             Далее >>
         </button>
+        </div>
     </div>
 
-    <div id = "data-directions"  class="serviceblock" style="padding: 25px; font-size: xx-large;">
-        <form class="row" id="birthday-form" style="padding-bottom: 50px; padding-top: 50px; font-size: x-large;">
+    <div id = "data-directions"  class="serviceblock" style="padding: 25px;">
+        <div class="card" style="border-radius: 20px;">
+        <form id="birthday-form" style="padding: 50px 20px;font-size: x-large;">
+            <div class="form-group">
             <input type="hidden" name="elementName" value="birthday">
             <input type="hidden" name="student" value="1">
             <input type="hidden" name="interaction" value="2">
-            <p class="col-sm-3" style="font-size: xx-large;">
+
+            <label for="birthday-data-direction">
                 Дата рождения
-            </p>
-            <select name="direction" style="height: 50px;" class="form-select col-sm-3" onchange="$.post('api.php', 'student=1&interaction=2&elementName=birthday&direction='+this.value, function (data) {obj = JSON.parse(data); if (obj.correct === 'true') lockSelect('data-directions', 0); $('#birthday-direction-message').html(obj.message);  document.getElementById('birthday-direction-message').style.background = (obj.correct === 'true') ? '#d1e7dd' : '#e9b4b4'; document.getElementById('birthday-direction-message').style.color = (obj.correct === 'true') ? '#024f2d' : '#4f0303'; document.getElementById('birthday-form').style.background = document.getElementById('birthday-direction-message').style.background;  })">
+            </label>
+            <select id="birthday-data-direction" name="direction" style="height: 50px;" class="form-control" onchange="$.post('api.php', 'student=1&interaction=2&elementName=birthday&direction='+this.value, function (data) {obj = JSON.parse(data); if (obj.correct === 'true') lockSelect('data-directions', 0); $('#birthday-direction-message').html(obj.message);  document.getElementById('birthday-direction-message').style.background = (obj.correct === 'true') ? '#d1e7dd' : '#e9b4b4'; document.getElementById('birthday-direction-message').style.color = (obj.correct === 'true') ? '#024f2d' : '#4f0303'; document.getElementById('birthday-form').style.background = document.getElementById('birthday-direction-message').style.background;  })">
                 <option selected disabled>...</option>
                 <option value="input">Входной</option>
                 <option value="output">Выходной</option>
                 <option value="updatable">Обновляемый</option>
             </select>
+            </div>
         </form>
+        </div>
         <p class="row" id="birthday-direction-message" style="color: #10cb73; font-size: xx-large; background: #d1e7dd; padding-left: 20px; padding-bottom: 10px;">
         </p>
 
-        <form class="row" id="firstschooldday-form" style="padding-bottom: 50px; padding-top: 50px; font-size: x-large;">
+        <form id="firstschooldday-form" style="padding-bottom: 50px; padding-top: 50px; font-size: x-large;">
+            <div class="form-group">
             <input type="hidden" name="dataelement" value="firstschooldday">
             <input type="hidden" name="student" value="1">
             <input type="hidden" name="interaction" value="2">
-            <p class="col-sm-3" style="font-size: xx-large;">
-                Дата первого дня в школе
-            </p>
-            <select name="direction" class="form-select col-3" onchange="$.post('api.php', 'student=1&interaction=2&elementName=firstschooldday&direction='+this.value, function (data) {obj = JSON.parse(data); $('#firstschooldday-direction-message').html(obj.message);  document.getElementById('firstschooldday-direction-message').style.background = (obj.correct == 'true') ? '#d1e7dd' : '#e9b4b4'; document.getElementById('firstschooldday-direction-message').style.color = (obj.correct == 'true') ? '#024f2d' : '#4f0303'; if (obj.correct == 'true') lockSelect('data-directions', 1); document.getElementById('firstschooldday-form').style.background = document.getElementById('firstschooldday-direction-message').style.background;  })">
-                <option selected disabled>...</option>
-                <option value="input">Входной</option>
-                <option value="output">Выходной</option>
-                <option value="updatable">Обновляемый</option>
-            </select>
+                <label for="firstschoolday-data-direction">
+                    Дата первого дня в школе
+                </label>
+                <select id="firstschoolday-data-direction" name="direction" class="form-control" onchange="$.post('api.php', 'student=1&interaction=2&elementName=firstschooldday&direction='+this.value, function (data) {obj = JSON.parse(data); $('#firstschooldday-direction-message').html(obj.message);  document.getElementById('firstschooldday-direction-message').style.background = (obj.correct == 'true') ? '#d1e7dd' : '#e9b4b4'; document.getElementById('firstschooldday-direction-message').style.color = (obj.correct == 'true') ? '#024f2d' : '#4f0303'; if (obj.correct == 'true') lockSelect('data-directions', 1); document.getElementById('firstschooldday-form').style.background = document.getElementById('firstschooldday-direction-message').style.background;  })">
+                    <option selected disabled>...</option>
+                    <option value="input">Входной</option>
+                    <option value="output">Выходной</option>
+                    <option value="updatable">Обновляемый</option>
+                </select>
+            </div>
         </form>
         <p class="row" id="firstschooldday-direction-message" style="color: #ca0919; background: #eccccf; font-size: xx-large">
         </p>
 
         <form class="row" id="dayscount-form" style="padding-bottom: 50px; padding-top: 50px; font-size: x-large;">
+            <div class="form-control">
             <input type="hidden" name="dataelement" value="dayscount">
             <input type="hidden" name="student" value="1">
             <input type="hidden" name="interaction" value="2">
             <p class="col-sm-3" style="font-size: xx-large;">
                 Количество дней
             </p>
-            <select  name="direction" class="form-select col-sm-3" onchange="$.post('api.php', 'student=1&interaction=2&elementName=dayscount&direction='+this.value, function (data) {obj = JSON.parse(data); $('#dayscount-direction-message').html(obj.message);  document.getElementById('dayscount-direction-message').style.background = (obj.correct == 'true') ? '#d1e7dd' : '#e9b4b4'; document.getElementById('dayscount-direction-message').style.color = (obj.correct == 'true') ? '#024f2d' : '#4f0303'; if (obj.correct == 'true') lockSelect('data-directions', 2); document.getElementById('dayscount-form').style.background = document.getElementById('dayscount-direction-message').style.background;  })">
+            <select  name="direction" class="form-control" onchange="$.post('api.php', 'student=1&interaction=2&elementName=dayscount&direction='+this.value, function (data) {obj = JSON.parse(data); $('#dayscount-direction-message').html(obj.message);  document.getElementById('dayscount-direction-message').style.background = (obj.correct == 'true') ? '#d1e7dd' : '#e9b4b4'; document.getElementById('dayscount-direction-message').style.color = (obj.correct == 'true') ? '#024f2d' : '#4f0303'; if (obj.correct == 'true') lockSelect('data-directions', 2); document.getElementById('dayscount-form').style.background = document.getElementById('dayscount-direction-message').style.background;  })">
                 <option selected disabled>...</option>
                 <option value="input">Входной</option>
                 <option value="output">Выходной</option>
                 <option value="updatable">Обновляемый</option>
             </select>
+            </div>
         </form>
         <p class="row" id="dayscount-direction-message" style="color: #ca0919; background: #eccccf; font-size: xx-large">
         </p>
